@@ -86,7 +86,7 @@ struct trapframe *tf; // Trap frame for the current
     - Push into a per-process kernel stack
 
 
-![Limited Direct Execution Protocol](https://imgur.com/1IraPUp)
+![Limited Direct Execution Protocol](https://github.com/connorgb/notes/blob/master/media/ostep/ldep.png)
 
 - A system-call number is assigned to a system call and saved to a user mode register
 - `write()` system calls specify address of a buffer. If a user passes an address to kernel space (a 'bad' address), the OS has to reject it.
@@ -98,7 +98,7 @@ struct trapframe *tf; // Trap frame for the current
 
 LDE Protocol (Timer Interrupt)
 
-![LDE Timer Interrupt](https://imgur.com/sRHpO02)
+![LDE Timer Interrupt](https://github.com/connorgb/notes/blob/master/media/ostep/ldepti.png)
 
 - OS can also disable interrupts while one is being handled
 - Locking schemes prevent concurrent access to internal data structures
@@ -300,9 +300,9 @@ strcpy(dst, src); // may still work
     - base/bounds management
     - Exception handling
 
-![LDE (Dynamic Relocation) @ Boot (p11)](https://imgur.com/Y4srzNI)
+![LDE (Dynamic Relocation) @ Boot (p11)](https://github.com/connorgb/notes/blob/master/media/ostep/ldedrb.png)
 
-![LDE (Dynamic Relocation) @ Runtime (p13)](https://imgur.com/M6I5ska)
+![LDE (Dynamic Relocation) @ Runtime (p13)](https://github.com/connorgb/notes/blob/master/media/ostep/ldedr.png)
 
   - Internal fragmentation in relocated processes
     - When the process stack and heap are smaller than allocated memory
