@@ -85,9 +85,8 @@ struct trapframe *tf; // Trap frame for the current
   - Hardware must save enough of the caller's registers (program counter, flags)
     - Push into a per-process kernel stack
 
-Limited Direct Execution Protocol
 
-![LDE Protocol](https://imgur.com/1IraPUp)
+![Limited Direct Execution Protocol](https://imgur.com/1IraPUp)
 
 - A system-call number is assigned to a system call and saved to a user mode register
 - `write()` system calls specify address of a buffer. If a user passes an address to kernel space (a 'bad' address), the OS has to reject it.
