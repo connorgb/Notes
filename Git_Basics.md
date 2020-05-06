@@ -1,5 +1,13 @@
 # Git Basics
 
+## Whenever you make changes, you will need to go through these commands:
+
+`git add *`
+
+`git commit -m 'Brief description of what you're adding to the repository'`
+
+`git push -u origin master`
+
 ## Setup
 `git config --global user.email "sampleemail@email.com"`
 
@@ -41,11 +49,3 @@
 
 `git pull fakeurl.org/path/to/repo.git`
 * Brings repo to your location in directory
-
-### Whenever you make changes, you will need to go through these commands:
-
-`git add *`
-
-`git commit -m 'Brief description of what you're adding to the repository'`
-
-`git push -u origin master`
