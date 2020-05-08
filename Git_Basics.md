@@ -1,6 +1,6 @@
 # Git Basics
 
-## Whenever you make changes, you will need to go through these commands:
+## Whenever you make changes, you will need to go through these 3 commands:
 
 `git add *`
 
@@ -22,6 +22,11 @@
 * While in existing project folder:
 
 `git init`
+
+## Pulling An Existing Repo To Local Directory
+
+`git pull fakeurl.org/path/to/repo.git`
+* Brings repo to your location in directory
 
 ## Adding Existing Files
 `git add *`
@@ -45,7 +50,3 @@
 `git push -u origin master`
 * The final push
 
-## Pulling An Existing Repo To Local Directory
-
-`git pull fakeurl.org/path/to/repo.git`
-* Brings repo to your location in directory

@@ -1,5 +1,43 @@
 # Learn You A Flutter
 
+## Understanding Widgets
+* Flutter uses widgets as configurations to build each element mounted on the screen
+* Each stateless or stateful widget has a `build` method with a `BuildContext` that handles the location of the widget in the widget tree
+
+### `StatelessWidget` Lifecycle
+* Declared with one class
+* The `build` method can be called from three scenarios:
+  * On creation
+  * When the parent widget changes
+  * When an `InheritedWidget` changes
+```dart
+class JournalList extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
+```
+### `StatefulWidget` Lifecycle
+* Mutable state
+* Declared with two classes:
+  * `StatefulWidget` class and `State`
+  * `StatefulWidget` is rebuilt when config changes, `State` can persist
+* `setState()` notifies framework that this object has changed
+```dart
+class JournalEdit extends StatefulWidget {
+  @override
+  _ JournalEditState createState() => _ JournalEditState();
+}
+
+class _JournalEditState extends State<JournalEdit> {
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
+```
+
 ## Projects
 
 ### Create Subfolders
@@ -17,7 +55,7 @@
   * Classes to retrieve data from internet services (Firestore, cloud)
 
 ### Structuring Widgets
-* The SDK does not automatically create the separate home file, which contains the main presentation page. You must make your own home.dart file in a pages folder. The main.dart file starts the app and calls the `Home` widget in the home file.
+* The SDK does not automatically create the separate home file, which contains the main presentation page. You must make your own `home.dart` file in a pages folder. The `main.dart` file starts the app and calls the `Home` widget in the `home` file.
 * The `main.dart` file has 3 main sections:
   * `import` package/file
   * `main()` function
@@ -30,8 +68,8 @@
   * behavioural 
   * motion
 
-## The Widget Tree
 
+## Widgets
 Some widgets that **cannot** be used with Cupertino:
 * `Scaffold`
   * Implements the Material Design visual layout, allows us to use Material Components widgets
@@ -52,24 +90,37 @@ Some widgets that **cannot** be used with Cupertino:
         * Stacked behind the `Toolbar` or `TabBar` widget
         * Height is usually the same as the `Appbar` widget's height
         * Can be a background, or any widget
-
-
-
-* `CircleAvatar` -- Rounded image display
+* `CircleAvatar`
+  * Rounded image display
 
 Some widgets that **can** be used with Cupertino:
-* `SingleChildScrollview` -- Vertical or horizontal scrolling for a single child widget
-* `Padding` -- Adds padding
-* `Column` -- Vertical list of child widgets
-* `Row` -- Horizontal "                   "
-* `Container` -- Can be an empty placeholder, or specify height, width, transform, and many other properties
-* `Expanded` -- Fills the available space for the child widget (belonging to a `Column` or `Row`)
-* `Text` -- Can be one or multiple lines. Optional `style` argument
-* `Stack` -- Lets you stack widgets, with an optional widget to align
-* `Positioned` -- Optional for the `Stack` widget to control child position and size
+* `SingleChildScrollview`
+  * Vertical or horizontal scrolling for a single child widget
+* `Padding`
+  * Adds padding
+* `Column`
+  * Vertical list of child widgets
+* `Row`
+  * Horizontal "                   "
+* `Container`
+  * Can be an empty placeholder, or specify height, width, transform, and many other properties through its `child` widget
+  * `child` is optional, and `Container` can be used to add space between widgets
+* `Expanded`
+  * Fills the available space for the child widget (belonging to a `Column` or `Row`)
+* `Text`
+  * Can be one or multiple lines
+  * Takes optional arguments `string`, `style`, `overflow` among others
+* `Stack`
+  * Lets you stack widgets, with an optional widget to align
+* `Positioned`
+  * Optional for the `Stack` widget to control child position and size
+* `SafeArea`
+  * Necessary for phones with a notch
+  * Can take a minimum padding or a Boolean to not enforce padding
 
-### Refactoring the Widget Tree
-#### With a Constant
+## Refactoring the Widget Tree
+
+### With a Constant
 * Initializes the widget to a `final` variable
 * Allows you to separate code into sections
 * Widgets rely on the `BuildContext` object of the parent widget when initialized with a constant
@@ -81,8 +132,7 @@ final container = Container(
   width: 40.0,
 );
 ```
-
-#### With a Method
+### With a Method
 * Returns the widget by calling the method name
   * Can return a value by a general `Widget` or a specific `Container`, `Row`, etc.
 * Pretty much identical to constants
@@ -105,7 +155,7 @@ Container _buildContainer() {
   );
 }
 ```
-#### With a Widget Class
+### With a Widget Class
 * Subclassing the `StatelessWidget` or `StatefulWidget` class
 * `const` allows you to cache and reuse the widget, and will not redraw when the parent widget redraws
 * Relies on its own `BuildContext`, not its parent's
@@ -129,7 +179,7 @@ class ContainerLeft extends StatelessWidget {
 const ContainerLeft(),
 ```
 
-## Widgets
+
 
 ## Animations
 ## App Navigation
