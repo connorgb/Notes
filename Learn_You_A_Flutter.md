@@ -2,7 +2,7 @@
 
 ## Projects
 
-### Create subfolders
+### Create Subfolders
 * assets\image
   * Holds subfolders such as images, fonts, and config files
 * lib\pages
@@ -15,6 +15,9 @@
   * Dart files separating widgets to reuse throughout the app
 * lib\services
   * Classes to retrieve data from internet services (Firestore, cloud)
+
+### Structuring Widgets
+* The SDK does not automatically create the separate home file, which contains the main presentation page. You must make your own home.dart file in a pages folder. The main.dart file starts the app and calls the `Home` widget in the home file.
 
 ## The Widget Tree
 ## Widgets
