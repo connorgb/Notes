@@ -37,20 +37,20 @@
 * The OSI model splits the host-to-network layer into data link and physical layers and adds presentation and session layers between the application and transport layers
   * Java's network classes work only with TCP/IP networks, and always in the application or transport layers
 
-### The Host-to-Network Layer (Physical)
+#### The Host-to-Network Layer (Physical)
 * Defines how a network interface (Ethernet card or WiFi antenna) sends IP datagrams over its physical connection to the local network and the world
 * Performance Considerations
   * fiber-optic connections, or satellite connections, or 3g data plan
   * APIs to communicate across networks are the same, thanks to the internet layer
 
-### Internet Layer (Network)
+#### Internet Layer (Network)
 * Bits and bytes are organized into packets and handled with an addressing scheme
 * IPv4 header is 20 to 60 bytes long, with a payload up to 65,515 bytes (in practice they are from a few dozen bytes to more than 8 kilobytes)
 * IPv6 has a larger header and up to 4 gigabytes of data
 * All bits and bytes are big endian (most significant on the left)
 * Also translates between types of Host-to-Network layers (Ethernet, WiFi, DSL, etc.)
 
-### Transport Layer
+#### Transport Layer
 * Ensures packets are recieved properly and in order
 * Two main protocols:
   * Transmission Control Protocol
@@ -60,7 +60,7 @@
     * Low overhead
     * No guarantee of order
 
-### Application Layer
+#### Application Layer
 * Lower layers define how data is transferred, the application layer decides what to do after
 
 ### IP, TCP, and UDP
@@ -71,7 +71,7 @@
   * Java does not support ICMP, only TCP and UDP
     * Can link to native code to run lower layer protocols like ICMP, ARP, RARP
 
-### IP Addresses and Domain Names
+#### IP Addresses and Domain Names
 * IPv4 uses 4-byte addresses
 * IPv6 uses 16-byte addresses
 *  IPv6 addresses are customarily written in eight blocks of four hexadecimal digits separated by colons, such as FEDC:BA98:7654:3210:FEDC:BA98:7654:3210
@@ -91,26 +91,27 @@
 * The IPv4 address that uses the same number for each of the four bytes (i.e., 255.255.255.255), is a broadcast address
   * Packets sent to this address are received by all nodes on the local network, though they are not routed beyond the local network
 
-### Ports
+#### Ports
 * HTTP uses port 80
 * Ports 1 to 1023 are reserved for root access on Unix, but all programs may send data to these ports
   * Complete listing of assigned ports is in /etc/services
 
-### Internet Address Blocks
+### The Internet
+#### Internet Address Blocks
 * When a company or an organization wants to set up an IP-based network connected to the Internet, their ISP assigns them a block of addresses
   * Each block has a fixed prefix -- For instance if the prefix is 216.254.85, then the local network can use addresses from 216.254.85.0 to 216.254.85.255. Because this block fixes the first 24 bits, it’s called a /24. A /23 specifies the first 23 bits, leaving 9 bits for 2^9 or 512 total local IP addresses. A /30 subnet (the smallest possible) specifies the first 30 bits of the IP addresses within the subnetwork, leaving 2 bits for 2^2 or 4 total local IP addresses
   * The lowest address in all blocks is used to identify the network itself, and the largest address is a broadcast address for the network, so you have two fewer available addresses than you might first expect
 
-### Network Address Translation
+#### Network Address Translation
 * In NAT-based networks most nodes only have local, non-routable addresses selected from either 10.x.x.x, 172.16.x.x to 172.31.x.x, or 192.168.x.x
 * The routers that connect the local networks to the ISP translate these local addresses to a much smaller set of routable addresses
   * The router watches my outgoing and incoming connections and adjusts the addresses in the IP packets. For an outgoing packet, it changes the source address to the router’s external address (216.254.85.72 on my network). For an incoming packet, it changes the destination address to one of the local addresses, such as 192.168.1.12
 * Eventually, IPv6 should make most of this obsolete
 
-### Firewalls
+#### Firewalls
 * The hardware and software that sits between the Internet and the local network, checking all the data that comes in or out
 
-### Proxy Servers
+#### Proxy Servers
 *  A machine that is prevented from connecting to the external network by a firewall would make a request for a web page from the local proxy server instead of requesting the web page directly from the remote web server
 * Whereas firewalls generally operate at the level of the transport or internet layer, proxy servers normally operate at the application layer
   * The notable exception are SOCKS proxy servers that operate at the transport layer, and can proxy for all TCP and UDP connections regardless of application layer protocol
@@ -140,17 +141,37 @@
     * Dues-paying member corporations
     * HTTP, HTML, XML
 
-### IETF RFCs
+#### IETF RFCs
 * Request For Comments are IETF standards
   * Working documents are called Internet drafts
 
-### W3C Recommendations
+#### W3C Recommendations
 * In October 1994, the World Wide Web Consortium was formed as a vendor-controlled body that might be able to avoid the pitfalls that plagued the IETF’s efforts to standardize HTML and HTTP
 * 5 levels of standards: note, working draft, candidate recommendation, proposed recommendation, and recommendation
 
 ## Streams
+* Java IO is built on streams
+* Filter streams can be chained to input or output streams
+* Readers and writers can be chained to input and output streams to allow programs to read and write text (i.e., characters) rather than bytes
+* Streams are synchronous; when a program (really a thread) asks a stream to read or write a piece of data, it waits for the data to be read or written before it does anything else
+  * Nonblocking IO (buffers and channels) is a little more complicated, but can be much faster in some high-volume applications
+
+### Output Streams
 * 
 
+### Input Streams
+#### Marking and Resetting
+### Filter Streams
+#### Chaining Filters Together
+#### Buffered Streams
+#### PrintStream
+#### Data Streams
+### Readers and Writers
+#### Writers
+#### Output Stream Writer
+#### Readers
+#### Filter Readers and Writers
+#### PrintWriter
 
 
 
