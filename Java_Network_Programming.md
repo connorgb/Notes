@@ -157,12 +157,90 @@
   * Nonblocking IO (buffers and channels) is a little more complicated, but can be much faster in some high-volume applications
 
 ### Output Streams
-* 
+```java
+public abstract class OutputStream
+```
+```java
+public abstract void write(int b) throws IOException
+public void write(byte[] data) throws IOException
+public void write(byte[] data, int offset, int length) throws IOException
+public void flush() throws IOException
+public void close() throws IOException
+```
+* Subclasses of `OutputStream` use these methods to write data onto particular media
+* OutputStream’s fundamental method is write(int b)
+  * This method takes an integer from 0 to 255 as an argument and writes the corresponding byte to the output stream
+  * Declared abstract because subclasses need to change it to handle their particular medium
+  *  If an int outside the range 0–255 is passed to `write(int b)`, the least significant byte of the number is written and the remaining three bytes are ignored (This is the effect of casting an int to a byte.)
+* You should `flush()` all streams immediately before you close them, or data left in
+the buffer when the stream is closed may get lost
+* When you’re done with a stream, close it by invoking its `close()` method
+  * further writes to it throw IOExceptions. However, some kinds of streams may still allow you to do things with the object
+    * A closed `ByteArrayOutputStream` can still be converted to an actual byte array and a closed `DigestOutputStream` can still return its digest
+  * Java now automatically invokes `close()` on any `AutoCloseable` objects declared inside the argument list of the try block
+    * `try with resources` can be used with any object that implements the `Closeable` interface, which includes almost every object you need to dispose:
+    ```java
+    try (OutputStream out = new FileOutputStream("/tmp/data.txt")) {
+        // work with output stream...
+    } catch (IOException ex) {
+        System.err.println(ex.getMessage());
+    }
+    ```
 
 ### Input Streams
+```java
+public abstract class InputStream
+```
+```java
+public abstract int read() throws IOException
+public int read(byte[] input) throws IOException
+public int read(byte[] input, int offset, int length) throws IOException
+public long skip(long n) throws IOException
+public int available() throws IOExeption
+public int close() throws IOException
+```
+* Basic method of `InputStream` is the noargs `read()` method
+  * Reads a single byte of data from the input stream’s source and returns it as an `int` from 0 to 255
+  * End of stream is signified by returning –1
+    * if length is 0, then it does not notice the end of stream and returns 0 instead
+  * Waits and blocks execution of any code that follows it until a byte of data is available and ready to be read
+    * Input and output can be slow, so if your program is doing anything else of importance, try to put I/O in its own thread
+  * Declared abstract because subclasses need to change it to handle their particular medium
+  * The multibyte read methods return the number of bytes actually read
+    * To guarantee that all the bytes you want are actually read, place the read in a loop that reads repeatedly until the array is filled
+* You can convert a signed byte to an unsigned byte by adding 256
+
 #### Marking and Resetting
+```java
+public void mark(int readAheadLimit)
+public void reset() throws IOException
+public boolean markSupported()
+```
+* To reread data, mark the current position in the stream with the `mark()` method
+  * You can later `reset()`
+    * Maximum reset length set by `readAheadLimit` argument to `mark()`
+  *  check whether the `markSupported()` method returns true
+  * In practice, more streams don’t support marking and resetting than do
+
 ### Filter Streams
+* Still work primarily with raw data as bytes: for instance, by compressing the data or interpreting it as binary numbers
+* The readers and writers handle the special case of text in a variety of encodings such as UTF-8 and ISO 8859-1
+* Filters are organized in a chain
+* Every filter output stream has the same `write()`, `close()`, and `flush()` methods as `java.io.OutputStream` -- Every filter input stream has the same `read()`, `close()`, and `available()` methods as `java.io.InputStream`
+
 #### Chaining Filters Together
+* Filters are connected to streams by their constructors
+```java
+DataOutputStream dout = new DataOutputStream(
+                        new BufferedOutputStream(
+                        new FileOutputStream("data.txt")
+                        ));
+```
+* Connection is permanent, filters cannot be disconnected from a stream
+* 
+
+
+
 #### Buffered Streams
 #### PrintStream
 #### Data Streams
