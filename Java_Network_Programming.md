@@ -237,19 +237,134 @@ DataOutputStream dout = new DataOutputStream(
                         ));
 ```
 * Connection is permanent, filters cannot be disconnected from a stream
-* 
-
 
 
 #### Buffered Streams
+* The `BufferedOutputStream` class stores written data in a buffer (a protected byte array
+field named `buf`) until the buffer is full or the stream is flushed
+* The `BufferedInputStream` class also has a protected byte array named `buf` that serves
+as a buffer
+  * When one of the stream’s `read()` methods is called, it first tries to get the
+requested data from the buffer
+  * Only when the buffer runs out of data does the stream
+read from the underlying source
+* `BufferedInputStream` has two constructors, as does `BufferedOutputStream`:
+  ```java
+  public BufferedInputStream(InputStream in)
+  public BufferedInputStream(InputStream in, int bufferSize)
+  public BufferedOutputStream(OutputStream out)
+  public BufferedOutputStream(OutputStream out, int bufferSize)
+  ```
+  * The first argument is the underlying stream from which unbuffered data will be read or to which buffered data will be written. The second argument, if present, specifies the number of bytes in the buffer
+    * Otherwise, the buffer size is set to 2,048 bytes for an input stream and 512 bytes for an output stream
+
 #### PrintStream
+* **PrintStream is evil and network programmers should avoid it like the plague!**
+* The output from `println()` is platform dependent
+  * A disaster for writing network clients and servers that must follow a precise protocol
+* `PrintStream` assumes the default encoding of the platform on which it’s running, but this encoding may not be what the server or client expects
+  *  A web browser receiving XML files will expect them to be encoded in UTF-8 or UTF-16 unless the server tells it otherwise, but a web server that uses PrintStream may well send the files encoded in CP1252 from a U.S.-localized Windows system or SJIS from a Japanese-localized system
+* `PrintStream` catches any and all exceptions thrown by the underlying output stream
+  * To do any error checking at all on a `PrintStream`, the code must explicitly `checkError()` every call
+  * Furthermore, once an error has occurred, there is no way to unset the flag so further errors can be detected
+
 #### Data Streams
+* The DataInputStream and DataOutputStream classes provide methods for reading and
+writing Java’s primitive data types and strings in a binary format
+  * the time protocol uses 32-bit big-endian integers, just like Java’s `int` data type
+  * The controlled-load network element service uses 32-bit IEEE 754 floatingpoint numbers, just like Java’s `float` data type
+  ```java
+  public final void writeBoolean(boolean b) throws IOException
+  public final void writeByte(int b) throws IOException
+  public final void writeShort(int s) throws IOException
+  public final void writeChar(int c) throws IOException
+  public final void writeInt(int i) throws IOException
+  public final void writeLong(long l) throws IOException
+  public final void writeFloat(float f) throws IOException
+  public final void writeDouble(double d) throws IOException
+  public final void writeChars(String s) throws IOException
+  public final void writeBytes(String s) throws IOException
+  public final void writeUTF(String s) throws IOException
+  ```
+* All data is written in big-endian format
+* Integers are written in two’s complement in the minimum number of bytes possible
+  * A byte is written as one byte, a short as two bytes, an int as four bytes, and a long as eight bytes
+* Floats and doubles are written in IEEE 754 form in four and eight bytes, respectively
+* Booleans are written as a single byte with the value 0 for false and 1 for true. Chars are written as two unsigned bytes
+* Neither `writeChars()` nor `writeBytes()` encodes the length of the string in the output stream, so you can’t really distinguish between raw characters and characters that make up part of a string
+* The `writeUTF()` method does include the length of the string
+  * It encodes the string itself in a variant of the UTF-8 encoding of Unicode
+    * Because this variant is subtly incompatible with most non-Java software, it should be used only for exchanging data with other Java programs that use a `DataInputStream` to read strings
+  * For exchanging UTF-8 text with all other software, you should use an `Input StreamReader` with the appropriate encoding
+```java
+public final boolean readBoolean() throws IOException
+public final byte readByte() throws IOException
+public final char readChar() throws IOException
+public final short readShort() throws IOException
+public final int readInt() throws IOException
+public final long readLong() throws IOException
+public final float readFloat() throws IOException
+public final double readDouble() throws IOException
+public final String readUTF() throws IOException
+```
+* In addition, `DataInputStream` provides two methods to read unsigned bytes and unsigned shorts and return the equivalent int. Java doesn’t have either of these data types, but you may encounter them when reading binary data written by a C program:
+```java
+public final int readUnsignedByte() throws IOException
+public final int readUnsignedShort() throws IOException
+```
+* `DataInputStream` has the usual two multibyte `read()` methods that read data into an
+array or subarray and return the number of bytes read
+  * It also has two `readFully()` methods that repeatedly read data from the underlying input stream into an array until the requested number of bytes have been read. If enough data cannot be read then an `IOException` is thrown
+    * This might be the case when you’ve read the `Content-length` field out of an HTTP header and thus know how many bytes of data there are:
+    ```java
+    public final int read(byte[] input) throws IOException
+    public final int read(byte[] input, int offset, int length)
+      throws IOException
+    public final void readFully(byte[] input) throws IOException
+    public final void readFully(byte[] input, int offset, int length)
+      throws IOException
+    ```
+
 ### Readers and Writers
+* The most important concrete subclasses of `Reader` and `Writer` are the `InputStreamReader` and the `OutputStreamWriter` classes
+  * An `InputStreamReader` contains an underlying input stream from which it reads raw bytes. It translates these bytes into Unicode characters according to a specified encoding
+  * An `OutputStreamWriter` receives Unicode characters from a running program. It then translates those characters into bytes using a specified encoding and writes the bytes onto an underlying output stream
+
 #### Writers
-#### Output Stream Writer
+* The `Writer` class mirrors the `java.io.OutputStream` class
+* given a `Writer` object `w`, how many and which bytes are written by these lines depends on the encoding `w` uses
+  * If it’s using big-endian UTF-16, it will write these 14 bytes (shown here in hexa‐ decimal) in this order:
+
+    00 4E 00 65 00 74 00 77 00 6F 00 72 00 6B
+
+    On the other hand, if w uses little-endian UTF-16, this sequence of 14 bytes is written:
+
+    4E 00 65 00 74 00 77 00 6F 00 72 00 6B 00
+
+    If w uses Latin-1, UTF-8, or MacRoman, this sequence of seven bytes is written:
+    
+    4E 65 74 77 6F 72 6B
+
+#### `OutputStreamWriter`
+* `OutputStreamWriter` is the most important concrete subclass of Writer
+  * An `OutputStreamWriter` receives characters from a Java program, and converts these into bytes
+according to a specified encoding and writes them onto an underlying output stream
+  * Its constructor specifies the output stream to write to and the encoding to use:
+    ```java
+    public OutputStreamWriter(OutputStream out, String encoding)
+      throws UnsupportedEncodingException
+    ```
+
 #### Readers
+* The `Reader` class mirrors the `java.io.InputStream` class
+
 #### Filter Readers and Writers
+* The `InputStreamReader` and `OutputStreamWriter` classes act as decorators on top of input and output streams that change the interface from a byte-oriented interface to a character-oriented interface
+  * Once this is done, additional character-oriented filters can be layered on top of the reader or writer using the `java.io.FilterReader` and `java.io.FilterWriter` classes
+
 #### PrintWriter
+* The `PrintWriter` class is a replacement for Java 1.0’s `PrintStream` class that properly handles multibyte character sets and international text
+  * `PrintWriter` still has the problems of platform dependency and minimal error reporting that plague `PrintStream`
 
 
 
