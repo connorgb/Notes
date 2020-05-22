@@ -366,8 +366,4 @@ according to a specified encoding and writes them onto an underlying output stre
 * The `PrintWriter` class is a replacement for Java 1.0’s `PrintStream` class that properly handles multibyte character sets and international text
   * `PrintWriter` still has the problems of platform dependency and minimal error reporting that plague `PrintStream`
 
-
-
-
-
-
+## Threads
