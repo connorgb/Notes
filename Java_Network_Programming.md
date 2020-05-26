@@ -1,5 +1,5 @@
 # Java Network Programming
-## Basics
+## 1: Basics
 * Java was the first language built for network programming
 * Each machine on the network is a node, and nodes that are full computers are called hosts
 * Nodes have network addresses
@@ -149,7 +149,7 @@
 * In October 1994, the World Wide Web Consortium was formed as a vendor-controlled body that might be able to avoid the pitfalls that plagued the IETF’s efforts to standardize HTML and HTTP
 * 5 levels of standards: note, working draft, candidate recommendation, proposed recommendation, and recommendation
 
-## Streams
+## 2: Streams
 * Java IO is built on streams
 * Filter streams can be chained to input or output streams
 * Readers and writers can be chained to input and output streams to allow programs to read and write text (i.e., characters) rather than bytes
@@ -366,4 +366,37 @@ according to a specified encoding and writes them onto an underlying output stre
 * The `PrintWriter` class is a replacement for Java 1.0’s `PrintStream` class that properly handles multibyte character sets and international text
   * `PrintWriter` still has the problems of platform dependency and minimal error reporting that plague `PrintStream`
 
-## Threads
+## 3: Threads
+
+### Running Threads
+#### Subclassing Thread
+#### Implementing the Runnable Interface
+### Returning Information from a Thread
+#### Race Conditions
+#### Polling
+#### Callbacks
+#### Futures, Callables, and Executors
+### Synchronization
+#### Synchronized Blocks
+#### Synchronized Methods
+#### Alternatives to Synchronization
+### Deadlock
+### Thread Scheduling
+#### Priorities
+#### Preemption
+### Thread Pools and Executors
+## 4: Internet Addresses
+### The InetAddress Class
+#### Creating New InetAddress Objects
+#### Getter Methods
+#### Address Types
+#### Testing Reachability
+#### Object Methods
+### Inet4Address and Inet6Address
+### The NetworkInterface Class
+#### Factory Methods
+#### Getter Methods
+### Some Useful Programs
+#### SpamCheck
+#### Processing Web Server Logfiles
+## 
