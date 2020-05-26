@@ -399,4 +399,14 @@ according to a specified encoding and writes them onto an underlying output stre
 ### Some Useful Programs
 #### SpamCheck
 #### Processing Web Server Logfiles
-## 
+## 5: URLs and URIs
+### URIs 
+#### URLs
+#### Relative URLs
+### The URL Class
+#### Creating New URLs
+#### Retrieving Data from a URL
+#### Splitting a URL into Pieces
+#### Equality and Comparison
+#### Conversion
+### The URI Class
